@@ -1,4 +1,5 @@
 import cv2
+from cv2 import illuminationChange
 import numpy as np
 
 def reddify(image):
@@ -29,7 +30,10 @@ def blueify(image):
 # blueify('bozu.png')
 
 def grayify(image):
-    image=cv2.imread(image,0)
+    image=cv2.imread(image)
+    for i in image:
+        for j in i:
+            j[0]*2989+j[1]*0.587+j[2]*0.114
     cv2.imwrite('Gray_Bozu.jpg',image)
 # grayify('bozu.png')
 
@@ -85,7 +89,7 @@ def contrast(image,alpha):
             j[2]*=alpha
     cv2.imwrite('Contrast_Bozu.jpg',img)
     return 'Contrast_Bozu.jpg'
-contrast('Bozu.png',10)
+# contrast('Bozu.png',10)
 
 def add_brightness(image,alpha):
     img=cv2.imread(image)
@@ -96,4 +100,25 @@ def add_brightness(image,alpha):
             j[2]+=alpha
     cv2.imwrite('Bright_Bozu.jpg',img)
     return 'Bright_Bozu.jpg'
-add_brightness('bozu.png',600)
+# add_brightness('bozu.png',600)
+
+def apply_threshold(image,threshold):
+    img=cv2.imread(image)
+    for i in img:
+        for j in i:
+            if int(j[0])>threshold:
+                j[0]=1
+            if int(j[0])<threshold:
+                j[0]=0
+            if int(j[1])>threshold:
+                j[1]=1
+            if int(j[1])<threshold:
+                j[1]=0
+            if int(j[2])>threshold:
+                j[2]=1
+            if int(j[2])<threshold:
+                j[2]=0
+            # print(j)
+    cv2.imwrite('Silhouette_Bozu.jpg',img)
+    return 'Silhouette_Bozu.jpg'
+apply_threshold('bozu.png',0)
