@@ -121,4 +121,10 @@ def apply_threshold(image,threshold):
             # print(j)
     cv2.imwrite('Silhouette_Bozu.jpg',img)
     return 'Silhouette_Bozu.jpg'
-apply_threshold('bozu.png',0)
+# apply_threshold('bozu.png',0)
+
+def bozu_headshot(image,x,y,height,width):
+    img = cv2.imread(image)
+    bozu_headshot = img[y:y+height, x:x+width]
+    cv2.imwrite("Bozu_headshot.jpg", bozu_headshot)
+bozu_headshot('bozu.png',0,0, 450,750)
