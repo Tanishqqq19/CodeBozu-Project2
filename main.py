@@ -127,4 +127,30 @@ def bozu_headshot(image,x,y,height,width):
     img = cv2.imread(image)
     bozu_headshot = img[y:y+height, x:x+width]
     cv2.imwrite("Bozu_headshot.jpg", bozu_headshot)
-bozu_headshot('bozu.png',0,0, 450,750)
+# bozu_headshot('blue_bozu.jpg',0,0, 450,750)
+
+def bozu_frame_1(image):
+    image = cv2.imread(image)
+    border_size=200
+    border_size2=200
+    border_bozu = cv2.copyMakeBorder(image, border_size, border_size, border_size, border_size, cv2.BORDER_CONSTANT, None, value = (0,0,128))
+
+    border_bozu1 = cv2.copyMakeBorder(border_bozu, border_size2, border_size2, border_size2, border_size2, cv2.BORDER_CONSTANT, None, value = (0,255,255))
+
+    cv2.imwrite("Bozu_frame_1.jpg", border_bozu1)
+# bozu_frame_1('bozu.png')
+
+
+def super_impose(picture1,picture2):
+    img1=cv2.imread(picture1)
+    img2=cv2.imread(picture2,cv2.IMREAD_UNCHANGED)
+    
+    width = int(img2.shape[1] * 7 / 100)
+    height = int(img2.shape[0] * 7/ 100)
+    dim = (width, height)
+    resized = cv2.resize(img2, dim, interpolation = cv2.INTER_AREA)
+    cv2.imshow("Resized image", resized)
+    cv2.waitKey(10000)
+    cv2.destroyAllWindows()
+
+super_impose('andromeda_galaxy.jpg','Bozu.png')
