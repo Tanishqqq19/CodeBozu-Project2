@@ -1,3 +1,4 @@
+from cgitb import small
 import cv2
 from cv2 import illuminationChange
 import numpy as np
@@ -143,14 +144,14 @@ def bozu_frame_1(image):
 
 def super_impose(picture1,picture2):
     img1=cv2.imread(picture1)
-    img2=cv2.imread(picture2,cv2.IMREAD_UNCHANGED)
-    
-    width = int(img2.shape[1] * 7 / 100)
-    height = int(img2.shape[0] * 7/ 100)
-    dim = (width, height)
-    resized = cv2.resize(img2, dim, interpolation = cv2.INTER_AREA)
-    cv2.imshow("Resized image", resized)
-    cv2.waitKey(10000)
-    cv2.destroyAllWindows()
+    img2=cv2.imread(picture2)
+    large_img=cv2.resize(img1,(1080,720))
+    small_img = cv2.resize(img2,(300,300))
+    x = 400
+    y = 170
+    x1 = x + small_img.shape[1]
+    y1 = y + small_img.shape[0]
+    large_img[y:y1,x:x1] = small_img
+    cv2.imwrite('Galaxy_Bozu.jpg',large_img)
 
 super_impose('andromeda_galaxy.jpg','Bozu.png')
