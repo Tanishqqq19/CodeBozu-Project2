@@ -154,4 +154,20 @@ def super_impose(picture1,picture2):
     large_img[y:y1,x:x1] = small_img
     cv2.imwrite('Galaxy_Bozu.jpg',large_img)
 
-super_impose('andromeda_galaxy.jpg','Bozu.png')
+
+# super_impose('andromeda_galaxy.jpg','Bozu.png')
+
+
+def vintage_bozu(image):
+    img1=cv2.imread(image)
+    rows=img1.shape[0]
+    columns=img1.shape[1]
+    x = cv2.getGaussianKernel(columns,200)
+    y = cv2.getGaussianKernel(rows,200)
+    resultant_kernel = y * x.T
+    mask = 255 * resultant_kernel / np.linalg.norm(resultant_kernel)
+    output = np.copy(img1)
+    for i in range(3):
+        output[:,:,i] = output[:,:,i] * mask
+    cv2.imwrite('Vintage_Bozu.jpg',output)
+vintage_bozu('bozu.png')
