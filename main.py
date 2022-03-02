@@ -31,12 +31,11 @@ def blueify(image):
 # blueify('bozu.png')
 
 def grayify(image):
-    image=cv2.imread(image)
-    for i in image:
-        for j in i:
-            j[0]*2989+j[1]*0.587+j[2]*0.114
-    cv2.imwrite('Gray_Bozu.jpg',image)
-# grayify('bozu.png')
+    img=cv2.imread(image,0)
+    for i in img:
+        i[0]*2989+i[1]*0.587+i[2]*0.114
+    cv2.imwrite('Gray_Bozu.jpg',img)
+grayify('bozu.png')
 
 def negative_bozu(image):
     img=cv2.imread(image,0)
@@ -170,4 +169,4 @@ def vintage_bozu(image):
     for i in range(3):
         output[:,:,i] = output[:,:,i] * mask
     cv2.imwrite('Vintage_Bozu.jpg',output)
-vintage_bozu('bozu.png')
+# vintage_bozu('bozu.png')
