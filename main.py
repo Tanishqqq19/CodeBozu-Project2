@@ -34,8 +34,8 @@ def grayify(image):
     img=cv2.imread(image,0)
     for i in img:
         i[0]*2989+i[1]*0.587+i[2]*0.114
-    cv2.imwrite('Gray_Bozu.jpg',img)
-grayify('bozu.png')
+    cv2.imwrite('New_Hipo.jpg',img)
+# grayify('bozu.png')
 
 def negative_bozu(image):
     img=cv2.imread(image,0)
@@ -98,7 +98,7 @@ def add_brightness(image,alpha):
             j[0]+=alpha
             j[1]+=alpha
             j[2]+=alpha
-    cv2.imwrite('Bright_Bozu.jpg',img)
+    cv2.imwrite('New_Hipo2.jpg',img)
     return 'Bright_Bozu.jpg'
 # add_brightness('bozu.png',600)
 
@@ -106,21 +106,26 @@ def apply_threshold(image,threshold):
     img=cv2.imread(image)
     for i in img:
         for j in i:
-            if int(j[0])>threshold:
-                j[0]=1
-            if int(j[0])<threshold:
-                j[0]=0
-            if int(j[1])>threshold:
-                j[1]=1
+            # print(j)
+            # if int(j[0])>=threshold:
+            #     j[0]=255
+            # if int(j[0])<threshold:
+            #     j[0]=0
+            if int(j[1])>=threshold:
+                j[0]=255
+                j[1]=255
+                j[2]=255
             if int(j[1])<threshold:
                 j[1]=0
-            if int(j[2])>threshold:
-                j[2]=1
-            if int(j[2])<threshold:
-                j[2]=0
+                # j[2]=0
+                # j[0]=0
+            # if int(j[2])>=threshold:
+            #     j[2]=255
+            # if int(j[2])<threshold:
+            #     j[2]=0
             # print(j)
-    cv2.imwrite('Silhouette_Bozu.jpg',img)
-    return 'Silhouette_Bozu.jpg'
+    cv2.imwrite('New_Hipo2.jpg',img)
+    return 'New_Hipo.jpg'
 # apply_threshold('bozu.png',0)
 
 def bozu_headshot(image,x,y,height,width):
@@ -168,5 +173,50 @@ def vintage_bozu(image):
     output = np.copy(img1)
     for i in range(3):
         output[:,:,i] = output[:,:,i] * mask
-    cv2.imwrite('Vintage_Bozu.jpg',output)
+    cv2.imwrite('New_Hipo1.jpg',output)
 # vintage_bozu('bozu.png')
+
+def sepia(image):
+    img=cv2.imread(image)
+    img_sepia = np.array(img, dtype=np.float64) 
+    img_sepia = cv2.transform(img_sepia, np.matrix([[0.272, 0.534, 0.131],[0.349, 0.686, 0.168],[0.393, 0.769, 0.189]])) 
+    img_sepia[np.where(img_sepia > 255)] = 255 
+    img_sepia = np.array(img_sepia, dtype=np.uint8)
+    cv2.imwrite('sepia.jpg',img_sepia)
+sepia('bozu.png')
+
+def sharp_sepia(image):
+    img=cv2.imread(image)
+    kernel = np.array([[0, -1, 0],
+                   [-1, 5,-1],
+                   [0, -1, 0]])
+    image_sharp = cv2.filter2D(src=img, ddepth=-1, kernel=kernel)
+    cv2.imwrite('sharp_sepia.jpg',image_sharp)
+sharp_sepia('sepia.jpg')
+
+
+""" Fix this bug pronto"""
+# grayify('real-hippo.jpeg')
+# vintage_bozu('New_Hipo.jpg')
+apply_threshold('New_Hipo1.jpg',120)
+
+# -------------------------------------------
+
+
+def myself(image):
+    img1 = cv2.imread(image)
+    # img1=cv2.resize(img,(300,400))
+    Z = img1.reshape((-1,3))
+    # convert to np.float32
+    Z = np.float32(Z)
+    # define criteria, number of clusters(K) and apply kmeans()
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+    K = 8
+    ret,label,center=cv2.kmeans(Z,K,None,criteria,10,cv2.KMEANS_RANDOM_CENTERS)
+    # Now convert back into uint8, and make original image
+    center = np.uint8(center)
+    res = center[label.flatten()]
+    res2 = res.reshape((img1.shape))
+    # cv2.imshow('res2',res2)
+    cv2.imwrite('cartoon_myself.jpg',res2)
+myself('Tanishq1.jpg')
