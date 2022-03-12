@@ -5,28 +5,37 @@ import numpy as np
 
 def reddify(image):
     img = cv2.imread(image)
-    b, g, r = cv2.split(img)
-    zeros_ch = np.zeros(img.shape[0:2], dtype="uint8")
-    red_img = cv2.merge([zeros_ch, zeros_ch, r])
-    cv2.imwrite("Red_Bozu.jpg", red_img)
+    for i in img:
+        for j in i:
+            if j[2]!=0:
+                j[2]=255
+                j[1]=0
+                j[0]=0
+    cv2.imwrite("Red_Bozu.jpg", img)
     return "Red_Bozu.jpg"
 # reddify('bozu.png')
 
 def greenify(image):
     img = cv2.imread(image)
-    b, g, r = cv2.split(img)
-    zeros_ch = np.zeros(img.shape[0:2], dtype="uint8")
-    blue_img = cv2.merge([zeros_ch, g, zeros_ch])
-    cv2.imwrite("Green_Bozu.jpg", blue_img)
+    for i in img:
+        for j in i:
+            if j[1]!=0:
+                j[1]=255
+                j[2]=0
+                j[0]=0
+    cv2.imwrite("Green_Bozu.jpg", img)
     return "Green_Bozu.jpg"
 # greenify('Bozu.png')
 
 def blueify(image):
     img = cv2.imread(image)
-    b, g, r = cv2.split(img)
-    zeros_ch = np.zeros(img.shape[0:2], dtype="uint8")
-    green_img = cv2.merge([b, zeros_ch, zeros_ch])
-    cv2.imwrite("Blue_Bozu.jpg", green_img)
+    for i in img:
+        for j in i:
+            if j[0]!=0:
+                j[0]=255
+                j[1]=0
+                j[2]=0
+    cv2.imwrite("Blue_Bozu.jpg", img)
     return "Blue_Bozu.jpg"
 # blueify('bozu.png')
 
@@ -34,7 +43,7 @@ def grayify(image):
     img=cv2.imread(image,0)
     for i in img:
         i[0]*2989+i[1]*0.587+i[2]*0.114
-    cv2.imwrite('New_Hipo.jpg',img)
+    cv2.imwrite('Gray_Bozu.jpg',img)
 # grayify('bozu.png')
 
 def negative_bozu(image):
@@ -53,14 +62,14 @@ def horizontal_flip(image):
     arr=np.array(mylist)
     cv2.imwrite('Horizontal_Bozu.jpg',arr)
     return 'Horizontal_Bozu.jpg'
-# horizontal_flip('Red_Bozu.jpg')
+horizontal_flip('Red_Bozu.jpg')
 
 def vertical_flip(image):
     img=cv2.imread(image)
     flipVertical = img[::-1]
     cv2.imwrite('Vertical_Bozu.jpg',flipVertical)
     return 'Vertical_Bozu.jpg'
-# vertical_flip('Red_Bozu.jpg')
+vertical_flip('Red_Bozu.jpg')
 
 def clip(broken_image):
     img=cv2.imread(broken_image)
@@ -78,6 +87,7 @@ def clip(broken_image):
                 j[2]=255
             if int(j[2])<0:
                 j[2]=0
+    # cv2.imwrite('Bozu_headshot.jpg',img)
 # clip('bozu.png')
 
 def contrast(image,alpha):
@@ -132,7 +142,7 @@ def bozu_headshot(image,x,y,height,width):
     img = cv2.imread(image)
     bozu_headshot = img[y:y+height, x:x+width]
     cv2.imwrite("Bozu_headshot.jpg", bozu_headshot)
-# bozu_headshot('blue_bozu.jpg',0,0, 450,750)
+bozu_headshot('blue_bozu.jpg',0,0, 450,750)
 
 def bozu_frame_1(image):
     image = cv2.imread(image)
@@ -190,7 +200,7 @@ def sharp_sepia(image):
     kernel = np.array([[0, -1, 0],
                    [-1, 5,-1],
                    [0, -1, 0]])
-    image_sharp = cv2.filter2D(src=img, ddepth=-1, kernel=kernel)
+    image_sharp = cv2.filter2D(src=img, ddepth=-2, kernel=kernel)
     cv2.imwrite('sharp_sepia.jpg',image_sharp)
 sharp_sepia('sepia.jpg')
 
@@ -198,25 +208,20 @@ sharp_sepia('sepia.jpg')
 """ Fix this bug pronto"""
 # grayify('real-hippo.jpeg')
 # vintage_bozu('New_Hipo.jpg')
-apply_threshold('New_Hipo1.jpg',120)
+# apply_threshold('New_Hipo1.jpg',120)
 
 # -------------------------------------------
 
 
 def myself(image):
     img1 = cv2.imread(image)
-    # img1=cv2.resize(img,(300,400))
     Z = img1.reshape((-1,3))
-    # convert to np.float32
     Z = np.float32(Z)
-    # define criteria, number of clusters(K) and apply kmeans()
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
     K = 8
     ret,label,center=cv2.kmeans(Z,K,None,criteria,10,cv2.KMEANS_RANDOM_CENTERS)
-    # Now convert back into uint8, and make original image
     center = np.uint8(center)
     res = center[label.flatten()]
     res2 = res.reshape((img1.shape))
-    # cv2.imshow('res2',res2)
     cv2.imwrite('cartoon_myself.jpg',res2)
-myself('Tanishq1.jpg')
+myself('Bozu.png')
